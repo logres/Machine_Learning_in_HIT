@@ -1,0 +1,30 @@
+Delta1 = zeros(size(Theta1,1),size(Theta1,2));
+Delta2 = zeros(size(Theta2,1),size(Theta2,2));
+
+for i=1:m
+
+z1 = X(i,:)';
+a1 = z1;
+a1 = [1;a1];
+z2 = Theta1*a1;
+a2 = sigmoid(z2);
+a2 = [1;a2];
+z3 = Theta2*a2;
+h = sigmoid(z3);
+
+delta3 = h - y_vector(i,:)';
+delta2 = Theta2'*delta3.*sigmoidGradient([1;z2]);
+
+Delta1 = Delta1+delta2(2:end)*a1';
+Delta2 = Delta2+delta3*a2';
+
+end;
+
+Theta1x = Theta1;
+Theta1x(:,1) = 0;
+
+Theta2x = Theta2;
+Theta2x(:,1) = 0;
+
+Theta1_grad = Delta1/m+lambda/m*Theta1x;
+Theta2_grad = Delta2/m+lambda/m*Theta2x;
